@@ -1,13 +1,20 @@
 package com.example.camilledunning.tipcalculator;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
     private ToggleButton toggle1;
     private ToggleButton toggle2;
     private Double tipPercentage;
+    private Button settings;
+    private Context context;
+
+    private List<ToggleButton> toggleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bindUI();
         addEventListeners();
+
+        createToggleList();
     }
 
     private void bindUI() {
@@ -32,11 +45,14 @@ public class MainActivity extends AppCompatActivity {
         total = (TextView) findViewById(R.id.textView5);
         toggle1 = (ToggleButton) findViewById(R.id.toggleButton1);
         toggle2 = (ToggleButton) findViewById(R.id.toggleButton2);
+        settings = (Button) findViewById(R.id.button);
+        context = (this);
     }
 
     private void addEventListeners() {
         addTextChangedListener();
         addToggleButtonListener();
+        addButtonListener();
     }
 
     private void addTextChangedListener() {
@@ -49,6 +65,15 @@ public class MainActivity extends AppCompatActivity {
 
             public void afterTextChanged(Editable s) {
                 calculateTip();
+            }
+        });
+    }
+
+    private void addButtonListener() {
+        settings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent openSettings = new Intent(context, Settings.class);
+                startActivity(openSettings);
             }
         });
     }
@@ -77,31 +102,40 @@ public class MainActivity extends AppCompatActivity {
         toggle1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (toggle2.isChecked()) {
-                        toggle2.toggle();
-                        tipPercentage = 0.10;
-                        calculateTip();
-                    }
-                } else if (!isChecked && !toggle2.isChecked()){
-                    toggle1.toggle();
-                }
+                buttonChecked(buttonView, isChecked);
+                tipPercentage = 0.10;
+                calculateTip();
             }
         });
 
         toggle2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (toggle1.isChecked()) {
-                        toggle1.toggle();
-                        tipPercentage = 0.20;
-                        calculateTip();
-                    }
-                } else if (!isChecked && !toggle1.isChecked()){
-                    toggle2.toggle();
-                }
+                buttonChecked(buttonView, isChecked);
+                tipPercentage = 0.20;
+                calculateTip();
             }
         });
+    }
+
+    private void buttonChecked(Button button, boolean isChecked) {
+        for (ToggleButton b : toggleList) {
+            System.out.println(String.format("%b", button.equals(b)));
+            if (!b.equals(button) && b.isChecked()) {
+                b.setChecked(false);
+            }
+            if (b.equals(button)) {
+                b.setChecked(true);
+            }
+        }
+    }
+
+    private void createToggleList() {
+        toggleList = new ArrayList<ToggleButton>();
+        toggleList.add(toggle1);
+        toggleList.add(toggle2);
+        // toggleList.add(toggle3);
+
+
     }
 }
