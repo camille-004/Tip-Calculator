@@ -15,8 +15,11 @@ public class Settings extends AppCompatActivity {
     private SeekBar sb2;
     private double percentage1;
     private double percentage2;
+    private double percentage3;
     private SharedPreferences sharedPreferences;
     public static final String PERCENTAGE_KEY_0 = "percent_key_0";
+    public static final String PERCENTAGE_KEY_1 = "percent_key_1";
+    public static final String PERCENTAGE_KEY_2 = "percent_key_2";
 
 
     @Override
@@ -38,6 +41,8 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onResume() {
         percentage1 = sharedPreferences.getLong(PERCENTAGE_KEY_0, 0.10);
+        percentage2 = sharedPreferences.getLong(PERCENTAGE_KEY_1, 0.15);
+        percentage3 = sharedPreferences.getLong(PERCENTAGE_KEY_2, 0.20);
 
     }
 
