@@ -21,8 +21,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText subtotal;
     private TextView tip;
     private TextView total;
+
+    private ToggleButton toggle0;
     private ToggleButton toggle1;
     private ToggleButton toggle2;
+
     private Double tipPercentage;
     private Button settings;
     private Context context;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         subtotal = (EditText) findViewById(R.id.editText1);
         tip = (TextView) findViewById(R.id.textView4);
         total = (TextView) findViewById(R.id.textView5);
+        toggle0 = (ToggleButton) findViewById(R.id.toggleButton0);
         toggle1 = (ToggleButton) findViewById(R.id.toggleButton1);
         toggle2 = (ToggleButton) findViewById(R.id.toggleButton2);
         settings = (Button) findViewById(R.id.button);
@@ -89,44 +93,51 @@ public class MainActivity extends AppCompatActivity {
         total.setText(String.format("$%.2f", totalamt));
     }
 
+    private void setToggleButtonText(ToggleButton bn, String text) {
+        bn.setText(text);
+        bn.setTextOn(text);
+        bn.setTextOff(text);
+    }
+
     private void addToggleButtonListener() {
         toggleIndex = 0;
 
-        toggle1.toggle();
+        toggle0.toggle();
         tipPercentage = 0.10;
-        toggle1.setText("10%");
-        toggle1.setTextOn("10%");
-        toggle1.setTextOff("10%");
 
-        toggle2.setText("20%");
-        toggle2.setTextOn("20%");
-        toggle2.setTextOff("20%");
+        setToggleButtonText(toggle0, "10%");
+        setToggleButtonText(toggle1, "15%");
+        setToggleButtonText(toggle2, "20%");
+
+        toggle0.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                buttonListenerActions(buttonView, isChecked, 0, 0.10);
+            }
+        });
 
         toggle1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (toggleIndex == 0 && !isChecked) buttonView.setChecked(true);
-                if (!isChecked) return;
-                toggleIndex = 0;
-                System.out.println(String.format("%d    %b", toggleIndex, isChecked));
-                buttonChecked(buttonView, isChecked);
-                tipPercentage = 0.10;
-                calculateTip();
+                buttonListenerActions(buttonView, isChecked, 1, 0.15);
             }
         });
 
         toggle2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (toggleIndex == 1 && !isChecked) buttonView.setChecked(true);
-                if (!isChecked) return;
-                toggleIndex = 1;
-                System.out.println(String.format("%d    %b", toggleIndex, isChecked));
-                buttonChecked(buttonView, isChecked);
-                tipPercentage = 0.20;
-                calculateTip();
+                buttonListenerActions(buttonView, isChecked, 2, 0.20);
             }
         });
+    }
+
+    private void buttonListenerActions(CompoundButton buttonView, boolean isChecked, int index, double tipPerc) {
+        if (toggleIndex == index && !isChecked) buttonView.setChecked(true);
+        if (!isChecked) return;
+        toggleIndex = index;
+        buttonChecked(buttonView, isChecked);
+        tipPercentage = tipPerc;
+        calculateTip();
     }
 
     private void buttonChecked(Button button, boolean isChecked) {
@@ -140,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void createToggleList() {
         toggleList = new ArrayList<ToggleButton>();
+        toggleList.add(toggle0);
         toggleList.add(toggle1);
         toggleList.add(toggle2);
-        // toggleList.add(toggle3);
     }
 }
