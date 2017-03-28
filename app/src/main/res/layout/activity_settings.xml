@@ -24,7 +24,7 @@
                 android:text="TextView"
                 android:layout_width="113dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView7"
+                android:id="@+id/settingsTextView0"
                 tools:text="Percentage #1" />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView8"
+                android:id="@+id/textView0"
                 android:layout_weight="0.41"
                 tools:text="Percentage #2" />
 

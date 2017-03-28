@@ -13,8 +13,11 @@ public class Settings extends AppCompatActivity {
     private TextView tv2;
     private SeekBar sb1;
     private SeekBar sb2;
-
+    private double percentage1;
+    private double percentage2;
     private SharedPreferences sharedPreferences;
+    public static final String PERCENTAGE_KEY_0 = "percent_key_0";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +35,15 @@ public class Settings extends AppCompatActivity {
         
     }
 
+    @Override
+    protected void onResume() {
+        percentage1 = sharedPreferences.getLong(PERCENTAGE_KEY_0, 0.10);
+
+    }
+
     private void bindUI() {
-        tv1 = (TextView) findViewById(R.id.settingsTextView1);
-        tv2 = (TextView) findViewById(R.id.settingsTextView2);
+        tv1 = (TextView) findViewById(R.id.settingsTextView0);
+        tv2 = (TextView) findViewById(R.id.settingsTextView1);
         sb1 = (SeekBar) findViewById(R.id.settingsSeekBar1);
         sb2 = (SeekBar) findViewById(R.id.settingsSeekBar2);
     }
