@@ -29,13 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
     private List<ToggleButton> toggleList;
 
+    private int toggleIndex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bindUI();
         addEventListeners();
-
         createToggleList();
     }
 
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addToggleButtonListener() {
+        toggleIndex = 0;
+
         toggle1.toggle();
         tipPercentage = 0.10;
         toggle1.setText("10%");
@@ -102,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
         toggle1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (toggleIndex == 0 && !isChecked) buttonView.setChecked(true);
+                if (!isChecked) return;
+                toggleIndex = 0;
+                System.out.println(String.format("%d    %b", toggleIndex, isChecked));
                 buttonChecked(buttonView, isChecked);
                 tipPercentage = 0.10;
                 calculateTip();
@@ -111,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
         toggle2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (toggleIndex == 1 && !isChecked) buttonView.setChecked(true);
+                if (!isChecked) return;
+                toggleIndex = 1;
+                System.out.println(String.format("%d    %b", toggleIndex, isChecked));
                 buttonChecked(buttonView, isChecked);
                 tipPercentage = 0.20;
                 calculateTip();
@@ -119,13 +130,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buttonChecked(Button button, boolean isChecked) {
-        for (ToggleButton b : toggleList) {
-            System.out.println(String.format("%b", button.equals(b)));
-            if (!b.equals(button) && b.isChecked()) {
-                b.setChecked(false);
-            }
-            if (b.equals(button)) {
-                b.setChecked(true);
+        for (int i = 0; i < toggleList.size(); ++i) {
+            ToggleButton bn = toggleList.get(i);
+            if (i != toggleIndex && bn.isChecked()) {
+                bn.setChecked(false);
             }
         }
     }
@@ -135,7 +143,5 @@ public class MainActivity extends AppCompatActivity {
         toggleList.add(toggle1);
         toggleList.add(toggle2);
         // toggleList.add(toggle3);
-
-
     }
 }
